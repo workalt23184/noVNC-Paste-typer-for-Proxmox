@@ -7,6 +7,7 @@
 // @match        https://*:8006/
 // @include      /^.*novnc.*/
 // @require http://code.jquery.com/jquery-3.3.1.min.js
+// @license MIT 
 // @grant        none
 // ==/UserScript==
 const delay = 100
