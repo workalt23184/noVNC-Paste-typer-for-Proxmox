@@ -1,49 +1,51 @@
 // ==UserScript==
 // @name         noVNC Paste-typer for Proxmox
-// @namespace    http://tampermonkey.net/
-// @version      0.2b
+// @namespace    https://github.com/junkhacker/noVNC-Paste-typer-for-Proxmox/edit/main/noVNC-paste-typer.js
+// @version      0.3
 // @description  Pastes text into a noVNC window (for use with Proxmox specifically) inspired by the script by Chester Enright
-// @author       Greg Grammon
-// @match        https://*:8006/
-// @include      /^.*novnc.*/
+// @author       Junkhacker
+// @include      /^https?://.*:8006/.*novnc.*
 // @require http://code.jquery.com/jquery-3.3.1.min.js
-// @license MIT 
+// @license MIT
 // @grant        none
 // ==/UserScript==
-const delay = 100
+
+const delay = 50
 ;(function () {
     'use strict'
     window.sendString = function(text) {
-        var el = document.getElementById("canvas-id")
-        text.split("",64).forEach(x=>{
-            setTimeout(()=>{
-                 var needs_shift = x.match(/[A-Z!@#$%^&*()_+{}:\"<>?~|]/)
-                 let evt
-                 if (needs_shift) {
-                     evt = new KeyboardEvent("keydown", {keyCode: 16})
-                     el.dispatchEvent(evt)
-                     evt = new KeyboardEvent("keydown", {key: x, shiftKey: true})
-                     el.dispatchEvent(evt)
-                     evt = new KeyboardEvent("keyup", {keyCode: 16})
-                     el.dispatchEvent(evt)
-                 }else{
-                     evt = new KeyboardEvent("keydown", {key: x})
+        const el = document.getElementById("canvas-id")
+        let promise = Promise.resolve();
+        text.split("").forEach(function(x){
+            promise = promise.then(function (){
+                let needs_shift = x.match(/[A-Z!@#$%^&*()_+{}:\"<>?~|]/)
+                let evt
+                if (needs_shift) {
+                    evt = new KeyboardEvent("keydown", {keyCode: 16})
+                    el.dispatchEvent(evt)
+                    evt = new KeyboardEvent("keydown", {key: x, shiftKey: true})
+                    el.dispatchEvent(evt)
+                    evt = new KeyboardEvent("keyup", {keyCode: 16})
+                    el.dispatchEvent(evt)
+                }else{
+                    evt = new KeyboardEvent("keydown", {key: x})
+                    el.dispatchEvent(evt)
                 }
-                el.dispatchEvent(evt)
-            }, delay)
+                return new Promise(function (resolve) {
+                    setTimeout(resolve, delay);
+                });
+            })
         })
-    }
 
+    }
     $(document).ready(function() {
         setTimeout(()=>{
-            console.log("Starting up noVNC Copy/Paste (for Proxmox)")
+            console.log("Starting up noVNC Paste-typer for Proxmox")
             $("canvas").attr("id", "canvas-id")
             window.addEventListener("paste", (event) => {
-                    let text = prompt("Enter text to paste. 64 char max:");
-                    if (text != null) window.sendString(text);
+                let text = prompt("Enter text to auto type.");
+                if (text != null) window.sendString(text);
             })
         }, 1000);
     })
-
-
 })()
