@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         noVNC Paste-typer for Proxmox
-// @namespace    https://raw.githubusercontent.com/junkhacker/noVNC-Paste-typer-for-Proxmox/main/noVNC-paste-typer.js
+// @namespace    https://raw.githubusercontent.com/workalt23184/noVNC-Paste-typer-for-Proxmox/refs/heads/main/noVNC-paste-typer.js
 // @version      0.3
 // @description  Pastes text into a noVNC window (for use with Proxmox specifically) inspired by the script by Chester Enright
 // @author       Junkhacker
 // @include      /^https?://.*:8006/.*novnc.*
-// @require http://code.jquery.com/jquery-3.3.1.min.js
-// @license MIT
+// @require      http://code.jquery.com/jquery-3.3.1.min.js
+// @license      MIT
 // @grant        none
 // ==/UserScript==
 
